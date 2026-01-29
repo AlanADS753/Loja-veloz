@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-loja
+    restart: always
+    environment:
+      - POSTGRES_DB=loja_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=senha_segura_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rede-loja-veloz
+
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: gateway-loja
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pedidos
+      - pagamentos
+      - estoque
+    networks:
+      - rede-loja-veloz
+
+
+  pedidos:
+    build: ./pedidos
+    container_name: pedidos-loja
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=admin
+      - DB_PASSWORD=senha_segura_123
+      - DB_NAME=loja_db
+    depends_on:
+      - postgres
+    networks:
+      - rede-loja-veloz
+
+  
+  pagamentos:
+    build: ./pagamentos
+    container_name: pagamentos-loja
+    networks:
+      - rede-loja-veloz
+
+  
+  estoque:
+    build: ./estoque
+    container_name: estoque-loja
+    networks:
+      - rede-loja-veloz
+
+
+networks:
+  rede-loja-veloz:
+    driver: bridge
+
+volumes:
+  postgres_data:
