@@ -91,3 +91,5 @@ Plaintext
 ├── pagamentos/         # Código fonte e Dockerfile de Pagamentos
 ├── docker-compose.yml  # Orquestração local
 └── .github/workflows/  # Definição do pipeline de CI/CD
+
+VÍDEO YOUTUBE: https://www.youtube.com/watch?v=mZVU60Ow3Uo
